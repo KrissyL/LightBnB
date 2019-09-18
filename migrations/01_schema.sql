@@ -1,9 +1,9 @@
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS property_id;
-DROP TABLE IF EXISTS reservations;
-DROP TABLE IF EXISTS rates;
-DROP TABLE IF EXISTS guest_reviews;
-DROP TABLE IF EXISTS property_reviews;
+DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS properties CASCADE;
+DROP TABLE IF EXISTS reservations CASCADE;
+DROP TABLE IF EXISTS rates CASCADE;
+DROP TABLE IF EXISTS guest_reviews CASCADE;
+DROP TABLE IF EXISTS property_reviews CASCADE;
 
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
@@ -14,18 +14,18 @@ CREATE TABLE users (
 
 CREATE TABLE properties (
     id SERIAL PRIMARY KEY,
-    user_ID INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    owner_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     title VARCHAR(100) NOT NULL,
     description TEXT NOT NULL,
     thumbnail_photo_url VARCHAR(255) NOT NULL,
     cover_photo_url VARCHAR(255) NOT NULL,
-    cost_per_night DECIMAL(4,2) NOT NULL DEFAULT 0,
+    cost_per_night DECIMAL(6,2) NOT NULL DEFAULT 0,
     parking_spaces SMALLINT NOT NULL DEFAULT 0,
     number_of_bathrooms SMALLINT NOT NULL DEFAULT 0,
     number_of_bedrooms SMALLINT NOT NULL DEFAULT 0,
     country VARCHAR(50) NOT NULL,
-    city VARCHAR(50) NOT NULL,
     province VARCHAR(50) NOT NULL,
+    city VARCHAR(50) NOT NULL,
     street VARCHAR(50) NOT NULL,
     post_code VARCHAR(10) NOT NULL,
     active BOOLEAN NOT NULL DEFAULT TRUE
@@ -34,7 +34,7 @@ CREATE TABLE properties (
 CREATE TABLE rates (
     id SERIAL PRIMARY KEY,
     property_id INTEGER NOT NULL REFERENCES properties(id) ON DELETE CASCADE,
-    cost_per_night DECIMAL(4, 2),
+    cost_per_night DECIMAL(6, 2),
     start_date DATE NOT NULL,
     end_date DATE NOT NULL
 );
